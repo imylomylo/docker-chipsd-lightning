@@ -36,3 +36,34 @@ You can verify that your Bitcoin Core installation is ready for use by running:
 
 ```
 This needs chips-cli in the path.
+
+
+**Notes**
+```
+HISTORY
+    6  cp chips.conf /root/.chips/
+    7  chipsd --help
+    8  ln -sf /chips3/src/chips-cli /usr/local/bin/
+    9  chipsd -conf /root/.chips/chips.conf -datadir=./ 
+   10  chipsd --help | more
+   11  chipsd -conf=/root/.chips/chips.conf -datadir=./ 
+   12  chips-cli getinfo
+   13  /lightning/lightningd/lightningd --alias=friendlyalias --ipaddr=62.210.81.14  --rgb=555555 --log-level=debug
+   14  ifconifg
+   15  /lightning/lightningd/lightningd --alias=friendlyalias --ipaddr=62.210.81.14  --rgb=555555 --log-level=debug &
+   16  /lightning/lightningd/lightning getinfo | jq
+   17  /lightning/cli/lightning-cli getinfo | jq
+   18  /lightning/cli/lightning-cli ge  
+   19  /lightning/cli/lightning-cli getnewaddress
+   20  /lightning/cli/lightning-cli getnewaddress | jq
+   21  /lightning/cli/lightning
+   22  /lightning/cli/lightning-cli newaddr | jq
+   23  /lightning/cli/lightning-cli listfunds
+   24  /lightning/cli/lightning-cli connect 0256124bcee83d67d0a0e781509ec5b8b58eb374d46dd93f811575b6c8268e4616  185.62.57.207
+   25  /lightning/cli/lightning-cli connect 025612
+   26  /lightning/cli/lightning-cli connect 02851a6b619adb7f9c4876a3d90b68b0dc0caf7140b9fd3cf9bb8eb7060e03958f 185.62.57.25
+   27  /lightning/cli/lightning-cli fundchannel  02851a6b619adb7f9c4876a3d90b68b0dc0caf7140b9fd3cf9bb8eb7060e03958f 200000
+   28  /lightning/cli/lightning-cli connect 0256124bcee83d67d0a0e781509ec5b8b58eb374d46dd93f811575b6c8268e4616  185.62.57.207
+   29  /lightning/cli/lightning-cli fundchannel 0256124bcee83d67d0a0e781509ec5b8b58eb374d46dd93f811575b6c8268e4616  50000
+   30  /lightning/cli/lightning-cli connect 0256124bcee83d67d0a0e781509ec5b8b58eb374d46dd93f811575b6c8268e4616  185.62.57.207
+```
