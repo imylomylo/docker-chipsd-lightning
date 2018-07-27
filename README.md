@@ -20,3 +20,19 @@ Wait for it to load the blocks, then you can issue
 ```
 /chips3/src/chips-cli -datadir=./ getinfo
 ```
+Start lightning
+```
+/lightning/lightningd/lightningd --alias friendlyalias --ipaddr=xxx.xxx.xxx.xxx --rgb aabbcc --log-level=debug
+```
+**Troubleshooting**
+```
+bitcoin-cli not found. Is bitcoin-cli (part of Bitcoin Core) available in your PATH?
+
+Make sure you have bitcoind running and that bitcoin-cli is able to connect to bitcoind.
+
+You can verify that your Bitcoin Core installation is ready for use by running:
+
+    $ chips-cli echo 'hello world'
+
+```
+This needs chips-cli in the path.
