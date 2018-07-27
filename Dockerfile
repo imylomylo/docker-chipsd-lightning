@@ -3,10 +3,18 @@
 # FROM <image>[:<tag>]
 FROM ubuntu:16.04
 # Install bitcoind from PPA
-ENV BUILD_PACKAGES="software-properties-common autoconf git build-essential libtool libprotobuf-c-dev libgmp-dev libsqlite3-dev python python3 zip jq libevent-dev pkg-config libssl-dev libcurl4-gnutls-dev cmake libboost-all-dev"
+ENV BUILD_PACKAGES="software-properties-common autoconf git build-essential libtool libprotobuf-c-dev libgmp-dev libsqlite3-dev python python3 zip jq libevent-dev pkg-config libssl-dev libcurl4-gnutls-dev cmake libboost-all-dev automake jq"
 
 RUN apt-get update && \
   apt-get install -y $BUILD_PACKAGES
+
+RUN git clone https://github.com/jl777/lightning && \
+  cd lightning && \
+  cd external && \
+  git clone https://github.com/ianlancetaylor/libbacktrace && \
+  cd .. && \
+  git checkout dev && \
+  make -j6
 
 RUN git clone https://github.com/jl777/chips3.git && \
   cd chips3 && \
@@ -25,6 +33,9 @@ RUN cd /chips3 && \
   ./configure LDFLAGS="-L/chips3/db4/lib/" CPPFLAGS="-I/chips3/db4/include/" -without-gui -without-miniupnpc --disable-tests --disable-bench --with-gui=no && \
   make -j6
 
+RUN ln -sf /chips3/src/chipsd /usr/local/bin/chipsd && \
+  ln -sf /chips/src/chips-cli /usr/local/bin/chips-cli && \
+  ln -sf /lightning/lightningd/lightningd /usr/local/bin/lightning
 
 # copy chips.conf
 #ADD . /home/chips3
@@ -33,7 +44,7 @@ RUN mkdir /home/chips3
 WORKDIR /home/chips3
 
 # EXPOSE rpc port for the node to allow outside container access
-EXPOSE 57777
+EXPOSE 57777 9735
 
 # There can only be one CMD instruction in a Dockerfile
 # CMD provides defaults for an executing container
