@@ -3,18 +3,10 @@
 # FROM <image>[:<tag>]
 FROM ubuntu:16.04
 # Install bitcoind from PPA
-ENV BUILD_PACKAGES="software-properties-common autoconf git build-essential libtool libprotobuf-c-dev libgmp-dev libsqlite3-dev python python3 zip jq libevent-dev pkg-config libssl-dev libcurl4-gnutls-dev cmake libboost-all-dev automake jq"
+ENV BUILD_PACKAGES="software-properties-common autoconf git build-essential libtool libprotobuf-c-dev libgmp-dev libsqlite3-dev python python3 zip jq libevent-dev pkg-config libssl-dev curl libcurl4-gnutls-dev cmake libboost-all-dev automake jq"
 
 RUN apt-get update && \
   apt-get install -y $BUILD_PACKAGES
-
-RUN git clone https://github.com/jl777/lightning && \
-  cd lightning && \
-  cd external && \
-  git clone https://github.com/ianlancetaylor/libbacktrace && \
-  cd .. && \
-  git checkout dev && \
-  make -j6
 
 RUN git clone https://github.com/jl777/chips3.git && \
   cd chips3 && \
@@ -22,7 +14,6 @@ RUN git clone https://github.com/jl777/chips3.git && \
 
 ADD db-4.8.30.NC.tar.gz /chips3
 
-#RUN tar zxvf  db-4.8.30.NC.tar.gz && \
 RUN  cd /chips3/db-4.8.30.NC/build_unix/ && \ 
   ../dist/configure -enable-cxx -disable-shared -with-pic -prefix=/chips3/db4 && \
   make -j6 && \
@@ -34,8 +25,7 @@ RUN cd /chips3 && \
   make -j6
 
 RUN ln -sf /chips3/src/chipsd /usr/local/bin/chipsd && \
-  ln -sf /chips/src/chips-cli /usr/local/bin/chips-cli && \
-  ln -sf /lightning/lightningd/lightningd /usr/local/bin/lightning
+  ln -sf /chips3/src/chips-cli /usr/local/bin/chips-cli 
 
 # copy chips.conf
 #ADD . /home/chips3
@@ -44,18 +34,12 @@ RUN mkdir /home/chips3
 WORKDIR /home/chips3
 
 # EXPOSE rpc port for the node to allow outside container access
-EXPOSE 57777 9735
+EXPOSE 57777 57776
 
 # There can only be one CMD instruction in a Dockerfile
 # CMD provides defaults for an executing container
 # Drop user into bash shell by default
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
+COPY entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
 
-#docker run -it -p 5000:12001 bitcoind-test
-#bitcoind -datadir=node -daemon
-#bitcoin-cli -datadir=node generate 101
-#bitcoin-cli getblockchaininfo 
-#bitcoin-cli -datadir=node stop
-
-#FROM ANOTHER TERMINAL
-#curl --user someuser:somepass --data '{"method": "getblockchaininfo"}' http://127.0.0.1:5000

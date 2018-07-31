@@ -36,3 +36,9 @@ You can verify that your Bitcoin Core installation is ready for use by running:
 
 ```
 This needs chips-cli in the path.
+
+
+chipsd only
+
+
+sudo docker run -it -p 57777:57777 -p 57776:57776 --mount src=/home/me/docker-chipsd-lightning/node,target=/home/chips3,type=bind chipsd
