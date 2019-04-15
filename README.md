@@ -38,7 +38,7 @@ You can verify that your Bitcoin Core installation is ready for use by running:
 This needs chips-cli in the path.
 
 
-**Notes**
+## Notes
 ```
 HISTORY
     6  cp chips.conf /root/.chips/
