@@ -8,14 +8,6 @@ ENV BUILD_PACKAGES="software-properties-common autoconf git build-essential libt
 RUN apt-get update && \
   apt-get install -y $BUILD_PACKAGES
 
-RUN git clone https://github.com/jl777/lightning && \
-  cd lightning && \
-  cd external && \
-  git clone https://github.com/ianlancetaylor/libbacktrace && \
-  cd .. && \
-  git checkout dev && \
-  make -j6
-
 RUN git clone https://github.com/jl777/chips3.git && \
   cd chips3 && \
   git checkout dev
@@ -25,13 +17,18 @@ ADD db-4.8.30.NC.tar.gz /chips3
 #RUN tar zxvf  db-4.8.30.NC.tar.gz && \
 RUN  cd /chips3/db-4.8.30.NC/build_unix/ && \ 
   ../dist/configure -enable-cxx -disable-shared -with-pic -prefix=/chips3/db4 && \
-  make -j6 && \
+  make -j2 && \
   make install 
 
 RUN cd /chips3 && \
   ./autogen.sh && \
   ./configure LDFLAGS="-L/chips3/db4/lib/" CPPFLAGS="-I/chips3/db4/include/" -without-gui -without-miniupnpc --disable-tests --disable-bench --with-gui=no && \
-  make -j6
+  make -j2
+
+RUN git clone https://github.com/jl777/lightning 
+
+RUN cd /lightning && \
+  make
 
 RUN ln -sf /chips3/src/chipsd /usr/local/bin/chipsd && \
   ln -sf /chips/src/chips-cli /usr/local/bin/chips-cli && \
